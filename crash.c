@@ -1,4 +1,4 @@
-// Last Update:2018-12-19 23:42:53
+// Last Update:2018-12-19 23:49:30
 /**
  * @file crash.c
  * @brief 
@@ -25,6 +25,25 @@ char *get_mem()
     return buffer;
 }
 
+void stack_overflow_crash()
+{
+    int i = 0;
+    char buffer[10];
+
+    for ( i=0; i<100000; i++ ) {
+        buffer[i] = 10;
+    }
+}
+
+void double_free_crash()
+{
+    void *p = malloc( 12 );
+    
+
+    free( p );
+    free( p );
+}
+
 void stack_destroy_crash()
 {
     char *p = get_mem();
@@ -38,7 +57,9 @@ void stack_destroy_crash()
 
 void foo()
 {
-//    func();
+    stack_overflow_crash();
+    double_free_crash();
+    func();
     stack_destroy_crash();
 }
 
@@ -66,6 +87,8 @@ int main()
     printf("stack_destroy_crash address %p\n", stack_destroy_crash );
     printf("dump_funcs address %p\n", dump_funcs );
     printf("get_mem address %p\n", get_mem );
+    printf("double_free_crash address %p\n", double_free_crash );
+    printf("stack_overflow_crash address %p\n", stack_overflow_crash );
     hello();
     foo();
     return 0;
