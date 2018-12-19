@@ -1,4 +1,4 @@
-// Last Update:2018-12-19 23:23:06
+// Last Update:2018-12-19 23:42:53
 /**
  * @file crash.c
  * @brief 
@@ -18,9 +18,28 @@ void func()
     *p = 10;
 }
 
+char *get_mem()
+{
+    char buffer[10];
+
+    return buffer;
+}
+
+void stack_destroy_crash()
+{
+    char *p = get_mem();
+    int i = 0;
+
+    for ( i=0; i<10000; i++ )
+        p[i] = 10;
+
+}
+
+
 void foo()
 {
-    func();
+//    func();
+    stack_destroy_crash();
 }
 
 void hello()
@@ -44,6 +63,9 @@ int main()
     printf("main address %p\n", main );
     printf("SignalHandler address %p\n", SignalHandler );
     printf("hello address %p\n", hello );
+    printf("stack_destroy_crash address %p\n", stack_destroy_crash );
+    printf("dump_funcs address %p\n", dump_funcs );
+    printf("get_mem address %p\n", get_mem );
     hello();
     foo();
     return 0;
